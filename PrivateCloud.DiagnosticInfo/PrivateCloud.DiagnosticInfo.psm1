@@ -2135,7 +2135,23 @@ function Get-SddcDiagnosticInfo
                         Show-Warning "'$cmdex' failed for node $Node ($($_.Exception.Message))"
                     }
                 }
+		# Gather Registry keys
+			$RegsToLog ='spacePort,HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters'
 
+		ForEach($Reg in $RegsToLog){
+			$LocalFile = (Join-Path $LocalNodeDir ($Reg -split ",")[0])
+			$Reg2Find = ($Reg -split ",")[1]
+		try {
+			$OutFT=""
+			$OutFT = Invoke-Command -ComputerName $usingNodeName -ScriptBlock {Get-ItemProperty -Path $using:Reg2Find}
+			$OutFT | Out-File -Width 9999 -Encoding ascii -FilePath "$LocalFile.txt" -Force
+			$OutXml=""
+			$OutXml = Invoke-Command -ComputerName $usingNodeName -ScriptBlock {Get-ItemProperty -Path $using:Reg2Find}
+			$OutXml | Export-Clixml -Path "$LocalFile.xml" -Force
+		    }
+		catch {
+			Show-Warning "'$Reg2Find' failed for node $Node ($($_.Exception.Message))"
+		      }}
                 $NodeSystemRootPath = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { $env:SystemRoot }
 
                 # Avoid to use 'Join-Path' because the drive of path may not exist on the local machine.
