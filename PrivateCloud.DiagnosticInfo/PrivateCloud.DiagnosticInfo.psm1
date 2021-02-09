@@ -2094,8 +2094,8 @@ function Get-SddcDiagnosticInfo
                                 'Get-ScheduledTask -CimSession _C_ | Get-ScheduledTaskInfo -CimSession _C_',
                                 'Get-SmbServerNetworkInterface -CimSession _C_',
                                 'Get-StorageFaultDomain -CimSession _A_ -Type StorageScaleUnit |? FriendlyName -eq _N_ | Get-StorageFaultDomain -CimSession _A_',
-				'Get-FirewallProfile -CimSession _C_',
-				'Get-FirewallRule -CimSession _C_',
+				'Get-NetFirewallProfile -CimSession _C_',
+				'Get-NetFirewallRule -CimSession _C_',
 				'Get-NetConnectionProfile -CimSession _C_'
 		#		'$gethardwaretimeout = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters).HwTimeout } -ErrorAction SilentlyContinue'
 
