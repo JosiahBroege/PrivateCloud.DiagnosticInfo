@@ -2107,6 +2107,7 @@ function Get-SddcDiagnosticInfo
                     $CmdsToLog += 'Get-VM -CimSession _C_ -ErrorAction SilentlyContinue',
                                     'Get-VMNetworkAdapter -All -CimSession _C_ -ErrorAction SilentlyContinue',
                                     'Get-VMSwitch -CimSession _C_ -ErrorAction SilentlyContinue'
+				    'Get-VMSwitchTeam -CimSession _C_ -ErrorAction SilentlyContinue'
                 }
 
                 foreach ($cmd in $CmdsToLog) {
