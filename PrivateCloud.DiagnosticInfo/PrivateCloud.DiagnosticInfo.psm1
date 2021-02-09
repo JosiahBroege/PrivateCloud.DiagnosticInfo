@@ -2093,6 +2093,7 @@ function Get-SddcDiagnosticInfo
                                 'Get-ScheduledTask -CimSession _C_ | Get-ScheduledTaskInfo -CimSession _C_',
                                 'Get-SmbServerNetworkInterface -CimSession _C_',
                                 'Get-StorageFaultDomain -CimSession _A_ -Type StorageScaleUnit |? FriendlyName -eq _N_ | Get-StorageFaultDomain -CimSession _A_'
+		#		'$gethardwaretimeout = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters).HwTimeout } -ErrorAction SilentlyContinue'
 
                 # These commands are specific to optional modules, add only if present
                 #   - DcbQos: RoCE environments primarily
@@ -2107,7 +2108,10 @@ function Get-SddcDiagnosticInfo
                     $CmdsToLog += 'Get-VM -CimSession _C_ -ErrorAction SilentlyContinue',
                                     'Get-VMNetworkAdapter -All -CimSession _C_ -ErrorAction SilentlyContinue',
                                     'Get-VMSwitch -CimSession _C_ -ErrorAction SilentlyContinue'
-				    'Get-VMSwitchTeam -CimSession _C_ -ErrorAction SilentlyContinue'
+				    'get-vmswitchteam -CimSession _C_ -SwitchName ((Get-VMSwitch -CimSession _C_ | Where-Object {$_.EmbeddedTeamingEnabled -eq $true}).Name) -ErrorAction SilentlyContinue'
+				    'Get-VMHost -CimSession _C_ -ErrorAction SilentlyContinue',
+                                    'Get-VMNetworkAdapterVlan -CimSession _C_ -ManagementOS -ErrorAction SilentlyContinue',
+                                    'Get-VMNetworkAdapterTeamMapping -CimSession _C_ -ManagementOS -ErrorAction SilentlyContinue'
                 }
 
                 foreach ($cmd in $CmdsToLog) {
