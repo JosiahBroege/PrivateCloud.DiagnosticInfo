@@ -38,6 +38,7 @@ $CommonFuncBlock = {
     Import-Module SmbShare
     Import-Module SmbWitness
     Import-Module Storage
+    Import-Module NetSecurity
 
     #
     # Shows error, cancels script
