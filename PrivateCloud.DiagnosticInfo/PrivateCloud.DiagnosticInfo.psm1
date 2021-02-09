@@ -2143,10 +2143,10 @@ function Get-SddcDiagnosticInfo
 			$Reg2Find = ($Reg -split ",")[1]
 		try {
 			$OutFT=""
-			$OutFT = Invoke-Command -ComputerName $usingNodeName -ScriptBlock {Get-ItemProperty -Path $using:Reg2Find}
+			$OutFT = Invoke-Command -ComputerName $usingNodeName -ScriptBlock {Get-ItemProperty -Path $Reg2Find}
 			$OutFT | Out-File -Width 9999 -Encoding ascii -FilePath "$LocalFile.txt" -Force
 			$OutXml=""
-			$OutXml = Invoke-Command -ComputerName $usingNodeName -ScriptBlock {Get-ItemProperty -Path $using:Reg2Find}
+			$OutXml = Invoke-Command -ComputerName $usingNodeName -ScriptBlock {Get-ItemProperty -Path $Reg2Find}
 			$OutXml | Export-Clixml -Path "$LocalFile.xml" -Force
 		    }
 		catch {
