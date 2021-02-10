@@ -2096,8 +2096,8 @@ function Get-SddcDiagnosticInfo
                                 'Get-StorageFaultDomain -CimSession _A_ -Type StorageScaleUnit |? FriendlyName -eq _N_ | Get-StorageFaultDomain -CimSession _A_',
 				'Get-NetFirewallProfile -CimSession _C_',
 				'Get-NetFirewallRule -CimSession _C_',
-				'Get-NetConnectionProfile -CimSession _C_'
-		#		'$gethardwaretimeout = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters).HwTimeout } -ErrorAction SilentlyContinue'
+				'Get-NetConnectionProfile -CimSession _C_',
+				'Invoke-Command -ComputerName _C_ -ConfigurationName $using:SessionConfigurationName { (Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters).HwTimeout } -ErrorAction SilentlyContinue'
 
                 # These commands are specific to optional modules, add only if present
                 #   - DcbQos: RoCE environments primarily
@@ -2135,28 +2135,7 @@ function Get-SddcDiagnosticInfo
                         Show-Warning "'$cmdex' failed for node $Node ($($_.Exception.Message))"
                     }
                 }
-		# Gather Registry keys
-            $regout = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters').HwTimeout}
-            $regout | Out-File -Width 9999 -Encoding ascii -FilePath "spaceport.txt" -Force
-		<# ForEach($Reg in $RegsToLog){
-			$LocalFile = (Join-Path $LocalNodeDir ($Reg -split ",")[0])
-			$Reg2Find = ($Reg -split ",")[1]
-			Show-Update "Reg2Find: $Reg2Find"
-		try {
-			#$OutFT=""
-			$OutFT = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName -ScriptBlock {Get-ItemProperty -Path $Reg2Find} -ErrorAction SilentlyContinue
-			Show-Update "OutFT: $OutFT"
-			$OutFT | Out-File -Width 9999 -Encoding ascii -FilePath "$LocalFile.txt" -Force
-			#$OutXml=""
-			$OutXml = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName -ScriptBlock {Get-ItemProperty -Path $Reg2Find} -ErrorAction SilentlyContinue
-			Show-Update "OutXML: $OutXml"
-			$OutXml | Export-Clixml -Path "$LocalFile.xml" -Force
-		    }
-		catch {
-			Show-Warning "'$Reg2Find' failed for node $Node ($($_.Exception.Message))"
-		      }}
-		 #>
-		 
+			 
                 $NodeSystemRootPath = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { $env:SystemRoot }
 
                 # Avoid to use 'Join-Path' because the drive of path may not exist on the local machine.
