@@ -2136,9 +2136,9 @@ function Get-SddcDiagnosticInfo
                     }
                 }
 		# Gather Registry keys
-			$RegsToLog ='spacePort,HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters'
-
-		ForEach($Reg in $RegsToLog){
+            $regout = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { (Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\spacePort\Parameters').HwTimeout}
+            $regout | Out-File -Width 9999 -Encoding ascii -FilePath "spaceport.txt" -Force
+		<# ForEach($Reg in $RegsToLog){
 			$LocalFile = (Join-Path $LocalNodeDir ($Reg -split ",")[0])
 			$Reg2Find = ($Reg -split ",")[1]
 			Show-Update "Reg2Find: $Reg2Find"
@@ -2155,6 +2155,8 @@ function Get-SddcDiagnosticInfo
 		catch {
 			Show-Warning "'$Reg2Find' failed for node $Node ($($_.Exception.Message))"
 		      }}
+		 #>
+		 
                 $NodeSystemRootPath = Invoke-Command -ComputerName $using:NodeName -ConfigurationName $using:SessionConfigurationName { $env:SystemRoot }
 
                 # Avoid to use 'Join-Path' because the drive of path may not exist on the local machine.
