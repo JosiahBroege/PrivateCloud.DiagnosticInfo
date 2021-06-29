@@ -2089,6 +2089,7 @@ function Get-SddcDiagnosticInfo
                                 'Get-NetAdapterRdma -CimSession _C_',
                                 'Get-NetAdapterRsc -CimSession _C_',
                                 'Get-NetAdapterRss -CimSession _C_',
+				'Get-NetAdapterSrIOV -CimSession _C_',
                                 'Get-NetAdapterVmq -CimSession _C_',
                                 'Get-NetIPv4Protocol -CimSession _C_',
                                 'Get-NetIPv6Protocol -CimSession _C_',
